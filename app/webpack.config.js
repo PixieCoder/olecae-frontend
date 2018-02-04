@@ -8,25 +8,19 @@ const isProd = (process.env.NODE_ENV === 'production');
 function getPlugins() {
     const plugins = [
         new CleanWebpackPlugin(['dist/*']),
-        new HtmlWebpackPlugin({
-            template: 'src/templates/index.html',
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor'
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'runtime'
-        })
+        new HtmlWebpackPlugin({template: 'src/templates/index.html',}),
+        new webpack.optimize.CommonsChunkPlugin({name: 'vendor'}),
+        new webpack.optimize.CommonsChunkPlugin({name: 'runtime'})
     ];
 
     if (isProd) {
         plugins.push(
             new webpack.optimize.UglifyJsPlugin({
-                compress: {
-                    warnings: !isProd,
-                    drop_console: isProd,
-                }
-            })
+                                                    compress: {
+                                                        warnings    : !isProd,
+                                                        drop_console: isProd,
+                                                    }
+                                                })
         );
     }
     return plugins;
@@ -40,13 +34,32 @@ const config = {
     },
 
     output: {
-        path: path.join(__dirname, 'dist'),
+        path    : path.join(__dirname, 'dist'),
         filename: 'js/[name].js',
     },
 
     plugins: getPlugins(),
+
+    module: {
+        rules: [
+            {
+                test   : /\.js(x)?$/,
+                exclude: /node_modules/,
+                use    : {
+                    loader : 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env', '@babel/preset-react'],
+                        plugins: [
+                            require('@babel/plugin-proposal-object-rest-spread'),
+                            require('@babel/plugin-proposal-optional-chaining'),
+                            require('@babel/plugin-transform-react-jsx'),
+                            require('@babel/plugin-proposal-class-properties')
+                        ]
+                    }
+                }
+            }
+        ]
+    }
 };
 
 module.exports = config;
-
-    
