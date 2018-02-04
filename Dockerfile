@@ -1,3 +1,3 @@
 FROM weahead/nodejs:latest
 
-MAINTAINER Filip Joelsson <filip@pixiecoder.com>
+LABEL maintainer="Filip Joelsson <filip@pixiecoder.com>"
