@@ -22,7 +22,7 @@ export default compose(
     withHandlers(
         {
             handleClick: props => e => {
-                props.actions.socketSend("Button pressed!");
+                props.actions.socketSend(JSON.stringify({type: 'msg', 'text': 'Button pressed!'}));
             },
         }),
     lifecycle(

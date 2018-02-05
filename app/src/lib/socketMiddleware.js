@@ -48,7 +48,7 @@ const createSocketMiddleware = function (socketUrl) {
             }
         };
     };
-    console.log("socketMiddleware\n", socketMiddleware);
+
     return socketMiddleware;
 };
 
