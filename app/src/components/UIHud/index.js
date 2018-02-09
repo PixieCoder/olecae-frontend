@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { compose, withHandlers, lifecycle } from 'recompose';
+import { compose, withHandlers, withState, lifecycle } from 'recompose';
 
 import {
+    socketSend,
     socketPopReceived,
 } from '../../actions';
 
@@ -19,6 +20,7 @@ function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators(
             {
+                socketSend,
                 socketPopReceived,
             }, dispatch),
     }
@@ -26,20 +28,28 @@ function mapDispatchToProps(dispatch) {
 
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
+    withState('chatInput', 'setChatInput', ''),
     withHandlers(
         {
             handleRemove: props => e => {
-                console.log("handleRemove");
                 props.actions.socketPopReceived();
-            }
+            },
+            handleChatInput : props => event => {
+                props.setChatInput(event.target.value);
+            },
+            handleChatSend  : props => event => {
+                props.actions.socketSend({type: 'msg', text: props.chatInput});
+                props.setChatInput('');
+            },
+
         }),
     lifecycle(
         {
             componentWillMount() {
-                console.log("UIHud componentWillMount");
+                //console.log("UIHud componentWillMount");
             },
             componentWillUpdate() {
-                console.log("UIHud componentWillUpdate");
+                //console.log("UIHud componentWillUpdate");
             },
         }),
 )(UIHud);

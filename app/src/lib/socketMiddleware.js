@@ -24,11 +24,16 @@ class Socket
     }
 
     onReceive(e) {
-        this.store.dispatch(socketReceive(e.data));
+        try {
+            this.store.dispatch(socketReceive(JSON.parse(e.data)));
+        }
+        catch (error) {
+            console.error(error);
+        }
     }
 
     send(e) {
-        this.conn.send(e);
+        this.conn.send(JSON.stringify(e));
     }
 }
 
