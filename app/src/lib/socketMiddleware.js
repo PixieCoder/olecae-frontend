@@ -47,6 +47,9 @@ const createSocketMiddleware = function (socketUrl) {
             console.log("action\n", action);
             if (action.type === socketSend.toString()) {
                 sock.send(action.payload);
+                if (action.payload.type === 'msg') {
+                    next(action);
+                }
             }
             else {
                 next(action);

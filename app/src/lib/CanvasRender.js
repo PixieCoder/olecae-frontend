@@ -1,4 +1,10 @@
-export class CanvasRender {
+const BLOCK_WIDTH = 32;
+const BLOCK_HEIGHT = 32;
+
+const QUART_CIRC = Math.PI / 2;
+
+export class CanvasRender
+{
     constructor() {
         console.log("CanvasRender ctor");
     }
@@ -11,8 +17,10 @@ export class CanvasRender {
         console.log(`CanvasRender init x:${width}, y:${height}\n`, canvas);
         this._gameState = gameState;
         this._canvas = canvas;
+        this._context = canvas.getContext('2d');
         this._width = width;
         this._height = height;
+        this.render();
         return true;
     }
 
@@ -31,6 +39,43 @@ export class CanvasRender {
             console.error("Render started but has no canvas!!!");
             return;
         }
-        console.log("render");
+        const blocksY = this._gameState.geometry.length;
+        const blocksX = this._gameState.geometry[0].length;
+
+        this._context.clearRect(0, 0, this._width, this._height);
+        this._context.fillStyle = 'rgb(50, 255, 30)';
+        for (let y = 0; y < blocksY; ++y) {
+            for (let x = 0; x < blocksX; ++x) {
+                if (this._gameState.geometry[y][x] === 0) {
+                    this._context.fillRect(x * BLOCK_WIDTH, y * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
+                }
+            }
+        }
+
+        const me = this._gameState.playerName;
+        const radius = (BLOCK_WIDTH + BLOCK_HEIGHT) / 4;
+        this._gameState.players.forEach((pos, player) => {
+            const x = (pos.x + 0.5) * BLOCK_WIDTH;
+            const y = (pos.y + 0.5) * BLOCK_HEIGHT;
+            if (player === me) {
+                const DIR_CIRC = this._gameState.dir * QUART_CIRC;
+                this._context.fillStyle = 'rgb(255, 200, 200)';
+                this._context.beginPath();
+                this._context.arc(x, y, radius, -QUART_CIRC + DIR_CIRC, QUART_CIRC + DIR_CIRC, true);
+                this._context.fill();
+            }
+            else {
+                this._context.fillStyle = 'rgb(200, 20, 200)';
+                this._context.beginPath();
+                this._context.arc(x, y, radius, 0, Math.PI * 2, true);
+                this._context.fill();
+            }
+            //console.log(`Draw arc for ${player} at `, pos);
+
+        });
+
+        requestAnimationFrame(() => this.render());
+        //console.log("render");
     }
 }
+

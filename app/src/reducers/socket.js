@@ -44,7 +44,8 @@ function socketSendReducer(state, action) {
     console.log("socketSendReducer\n", action);
     return {
         ...state,
-        lastSent: action.payload,
+        receiveQueue: [{...action.payload, from: 'Me'}, ...state.receiveQueue],
+        lastSent    : action.payload,
     };
 }
 

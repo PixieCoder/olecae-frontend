@@ -4,18 +4,19 @@ import UIButton from '../UIButton';
 
 const UIHud = ({receiveQueue, handleRemove, handleChatSend, handleChatInput, chatInput, setChatInput}) => (
     <div style={{
-        position    : 'fixed',
-        height      : '300px',
-        maxHeight   : '20%',
-        bottom      : 0,
-        left        : '25%',
-        width       : '50%',
-        padding     : '20px',
-        borderRadius: '20px',
-        borderWidth : '1px',
-        borderColor : 'grey',
-        borderStyle : 'solid',
-        display     : 'flex',
+        position       : 'fixed',
+        height         : '300px',
+        maxHeight      : '20%',
+        bottom         : 0,
+        left           : '25%',
+        width          : '50%',
+        padding        : '20px',
+        borderRadius   : '20px',
+        borderWidth    : '1px',
+        borderColor    : 'grey',
+        borderStyle    : 'solid',
+        display        : 'flex',
+        backgroundColor: 'rgba(128,128,128,0.5)',
     }}>
         <div className="chat-view"
              style={{
@@ -35,7 +36,7 @@ const UIHud = ({receiveQueue, handleRemove, handleChatSend, handleChatInput, cha
                     {
                         receiveQueue.map(
                             (msg, i) =>
-                                <li key={i}>{msg.text}</li>
+                                <li key={i}>{msg.from || "Server"}: {msg.text}</li>
                         )
                     }
                 </ul> || null

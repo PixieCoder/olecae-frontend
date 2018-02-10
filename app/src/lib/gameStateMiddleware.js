@@ -23,6 +23,9 @@ const createGameStateMiddleware = function (gameState) {
                         if (action.payload.type === 'msg') {
                             next(action);
                         }
+                        else if (action.payload.type === 'move' && !action.payload.status){
+                            gameState.handleSocketEvent(action.payload);
+                        }
                         else {
                             next({
                                      ...action,

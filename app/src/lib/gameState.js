@@ -103,4 +103,8 @@ export class GameState
     get playerName() {
         return this._playerName;
     }
+
+    get dir() {
+        return this._dir;
+    }
 }
