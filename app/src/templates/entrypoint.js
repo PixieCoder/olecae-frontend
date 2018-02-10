@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 
 import initRedux from '../lib/reduxStore';
 import GameView from '../layouts/GameView';
-import { GameState } from '../lib/gameState';
+import { GameState } from '../lib/GameState';
 
 (function () {
     const gameState = new GameState();

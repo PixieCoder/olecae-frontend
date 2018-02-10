@@ -1,7 +1,7 @@
 import React from 'react';
 
 import UIHud from '../../components/UIHud';
-import GameRenderer from '../../components/GameRenderer';
+import GameRenderer from '../../components/GameCanvas';
 
 const GameView = ({gameState, ...props}) => (
     <div>
