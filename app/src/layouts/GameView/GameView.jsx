@@ -1,10 +1,11 @@
 import React from 'react';
 
 import UIHud from '../../components/UIHud';
+import GameRenderer from '../../components/GameRenderer';
 
-const GameView = ({...props}) => (
+const GameView = ({gameState, ...props}) => (
     <div>
-        <h1>TEST!</h1>
+        <GameRenderer gameState={gameState}/>
         <UIHud/>
     </div>
 );

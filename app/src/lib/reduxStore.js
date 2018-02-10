@@ -6,10 +6,10 @@ import reducers from '../reducers';
 
 let reduxStore = null;
 
-const initRedux = function (initialState = {}) {
+const initRedux = function (gameState, initialState = {}) {
     if (!reduxStore) {
         const socketMiddleware = createSocketMiddleware('ws://olecae.docker:2345');
-        const gameStateMiddleware = createGameStateMiddleware();
+        const gameStateMiddleware = createGameStateMiddleware(gameState);
         reduxStore = {
             ...createStore(
                 reducers,

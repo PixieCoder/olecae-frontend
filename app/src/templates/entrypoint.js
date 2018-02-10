@@ -4,16 +4,18 @@ import { Provider } from 'react-redux';
 
 import initRedux from '../lib/reduxStore';
 import GameView from '../layouts/GameView';
+import { GameState } from '../lib/gameState';
 
 (function () {
-    const store = initRedux({});
+    const gameState = new GameState();
+    const store = initRedux(gameState, {});
     const appElement = document.getElementById('react-entry');
 
     if (!appElement) return;
 
     ReactDOM.render(
         <Provider store={store}>
-            <GameView/>
+            <GameView gameState={gameState}/>
         </Provider>,
         appElement,
     );
