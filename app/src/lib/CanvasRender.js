@@ -54,20 +54,21 @@ export class CanvasRender
 
         const me = this._gameState.playerName;
         const radius = (BLOCK_WIDTH + BLOCK_HEIGHT) / 4;
-        this._gameState.players.forEach((pos, player) => {
-            const x = (pos.x + 0.5) * BLOCK_WIDTH;
-            const y = (pos.y + 0.5) * BLOCK_HEIGHT;
+        this._gameState.players.forEach((data, player) => {
+            const x = (data.pos.x + 0.5) * BLOCK_WIDTH;
+            const y = (data.pos.y + 0.5) * BLOCK_HEIGHT;
+            const color = `rgb(${data.color.r},${data.color.g},${data.color.b})`;
+
+            const DIR_CIRC = data.dir * QUART_CIRC;
+            this._context.fillStyle = color;
+            this._context.beginPath();
+            this._context.arc(x, y, radius, -QUART_CIRC + DIR_CIRC, QUART_CIRC + DIR_CIRC, true);
+            this._context.fill();
+
             if (player === me) {
-                const DIR_CIRC = this._gameState.dir * QUART_CIRC;
-                this._context.fillStyle = 'rgb(255, 200, 200)';
+                this._context.fillStyle = 'rgba(255, 255, 255, 0.5)';
                 this._context.beginPath();
-                this._context.arc(x, y, radius, -QUART_CIRC + DIR_CIRC, QUART_CIRC + DIR_CIRC, true);
-                this._context.fill();
-            }
-            else {
-                this._context.fillStyle = 'rgb(200, 20, 200)';
-                this._context.beginPath();
-                this._context.arc(x, y, radius, 0, Math.PI * 2, true);
+                this._context.arc(x, y, radius / 3, 0, 2 * Math.PI, true);
                 this._context.fill();
             }
             //console.log(`Draw arc for ${player} at `, pos);

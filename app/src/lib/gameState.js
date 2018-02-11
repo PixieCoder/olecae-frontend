@@ -17,10 +17,12 @@ export class GameState
     // Payload handlers
     handleWELCOME = function (payload) {
         // TODO: Check api-version on the payload
+        console.log("handleWELCOME\n", payload);
+        const data = payload.data;
         this._geometry = payload.geom; // TODO: Make sure the geometry is good
         this._players.clear();
         this._playerName = payload.name;
-        this._players.set(this._playerName, payload.pos);
+        this._players.set(this._playerName, payload.data);
 
         Object.keys(payload.currentPlayers)
               .forEach(key => {
@@ -28,16 +30,18 @@ export class GameState
               });
     };
 
+    handleTURN = function (payload) {
+        this._players.get(payload.name).dir = payload.data.dir;
+    };
+
     handleMOVE = function (payload) {
         if (payload.status) return payload.status;
 
-        this._players.set(payload.name, payload.pos);
-        const subject = payload.name === this._playerName ? 'You' : payload.name;
-        return `${subject} moved to [${payload.pos.x}, ${payload.pos.y}]`;
+        this._players.get(payload.name).pos = payload.data.pos;
     };
 
     handlePLAYERCONNECT = function (payload) {
-        this._players.set(payload.name, payload.pos);
+        this._players.set(payload.name, payload.data);
         return `New player "${payload.name}" connected`;
     };
 
@@ -68,8 +72,8 @@ export class GameState
 
     // Local handlers
     move() {
-        const oldPos = this._players.get(this._playerName);
-        const delta = DIRECTIONS[this._dir];
+        const oldPos = this.player.pos;
+        const delta = DIRECTIONS[this.player.dir];
         const newPos = {x: delta.x + oldPos.x, y: delta.y + oldPos.y};
         // TODO: Check if this is even possible
         console.log(newPos);
@@ -81,16 +85,21 @@ export class GameState
             throw "Bad argument to GameState.turn!";
         }
 
-        this._dir += arg;
-        while (this._dir >= DIRECTIONS.length) {
-            this._dir -= (DIRECTIONS.length);
+        let newDir = this.player.dir + arg;
+
+        while (newDir >= DIRECTIONS.length) {
+            newDir -= (DIRECTIONS.length);
         }
-        while (this._dir < 0) {
-            this._dir += (DIRECTIONS.length);
+        while (newDir < 0) {
+            newDir += (DIRECTIONS.length);
         }
+        return newDir;
     }
 
     // Getters
+    get player() {
+        return this._players.get(this._playerName);
+    }
 
     get geometry() {
         return this._geometry;
@@ -105,6 +114,6 @@ export class GameState
     }
 
     get dir() {
-        return this._dir;
+        return this.player.dir;
     }
 }

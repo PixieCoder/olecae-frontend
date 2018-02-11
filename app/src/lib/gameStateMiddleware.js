@@ -23,7 +23,7 @@ const createGameStateMiddleware = function (gameState) {
                         if (action.payload.type === 'msg') {
                             next(action);
                         }
-                        else if (action.payload.type === 'move' && !action.payload.status){
+                        else if (['move', 'turn'].find(a => a === action.payload.type)) {
                             gameState.handleSocketEvent(action.payload);
                         }
                         else {
@@ -37,7 +37,7 @@ const createGameStateMiddleware = function (gameState) {
                         store.dispatch(socketSend({type: 'move', pos: gameState.move()}));
                         break;
                     case gameTurnType:
-                        gameState.turn(action.payload);
+                        store.dispatch(socketSend({type: 'turn', dir: gameState.turn(action.payload)}));
                         break;
                     default:
                         next(action);
