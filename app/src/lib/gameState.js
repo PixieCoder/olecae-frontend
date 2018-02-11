@@ -1,7 +1,9 @@
 const DIRECTIONS = [
     {x: 1, y: 0},
+    {x: 1, y: 1},
     {x: 0, y: 1},
     {x: -1, y: 0},
+    {x: -1, y: -1},
     {x: 0, y: -1},
 ];
 
@@ -11,7 +13,6 @@ export class GameState
     constructor() {
         this._players = new Map();
         this._geometry = [['0', '1'], ['1', '0']];
-        this._dir = 0;
     }
 
     // Payload handlers
